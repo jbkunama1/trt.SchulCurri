@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🏅 Schulcurriculum Sport – Realschule BW</title>
+<style>
+:root{--bg:linear-gradient(135deg,#0f3460,#16213e 50%,#1a1a2e);--card:#fff;--text:#223;--muted:#667;--head:#0f3460;--accent:#e94560;--accent2:#533483;--ok:#22c55e}
+[data-theme=sunset]{--bg:linear-gradient(135deg,#ff9966,#ff5e62 50%,#b31217);--head:#b31217;--accent:#ff5e62;--accent2:#ff9966}
+[data-theme=forest]{--bg:linear-gradient(135deg,#134e5e,#71b280);--head:#134e5e;--accent:#71b280;--accent2:#f0a202}
+[data-theme=dark]{--bg:linear-gradient(135deg,#0b0f19,#111827);--card:#1f2937;--text:#e5e7eb;--muted:#9ca3af;--head:#93c5fd;--accent:#f472b6;--accent2:#60a5fa}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);background-attachment:fixed;color:var(--text);min-height:100vh;padding-bottom:3rem}
+header{position:sticky;top:0;z-index:5;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;padding:.6rem 1rem;background:rgba(10,10,25,.6);backdrop-filter:blur(10px)}
+header b{color:#fff;font-size:1.1rem}
+header nav{display:flex;gap:.3rem;flex-wrap:wrap;margin-left:auto}
+header a,.themes button{color:#fff;text-decoration:none;background:rgba(255,255,255,.15);border:none;border-radius:.6rem;padding:.3rem .6rem;font-size:.9rem;cursor:pointer}
+.themes{display:flex;gap:.25rem}
+main{max-width:1050px;margin:0 auto;padding:1rem}
+.hero{text-align:center;color:#fff;padding:2rem 1rem}
+.hero .e{font-size:2.4rem;letter-spacing:.3rem}
+.hero h1{font-size:clamp(1.7rem,5vw,2.6rem);text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.hero p{opacity:.92;margin-top:.4rem}
+h2.sec{color:#fff;margin:1.8rem 0 .6rem;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.card{background:var(--card);border-radius:1rem;padding:1rem 1.1rem;box-shadow:0 8px 22px rgba(0,0,0,.2)}
+.card h3{color:var(--head);margin-bottom:.3rem}
+.grid{display:grid;gap:.8rem;grid-template-columns:1fr}
+@media(min-width:680px){.grid{grid-template-columns:1fr 1fr}}
+.muted{color:var(--muted);font-size:.92rem}
+.tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.8rem}
+.tabs button{border:none;border-radius:.8rem;padding:.55rem .9rem;font-weight:700;cursor:pointer;background:rgba(255,255,255,.2);color:#fff}
+.tabs button.on{background:var(--accent)}
+.item{border-left:.45rem solid var(--accent2);display:flex;gap:.8rem;align-items:flex-start}
+.item.done{border-left-color:var(--ok)}
+.item input{width:1.5rem;height:1.5rem;margin-top:.2rem;flex:none}
+.badge{background:var(--accent2);color:#fff;border-radius:.5rem;padding:.1rem .5rem;font-weight:800;font-size:.8rem}
+.h{float:right;font-weight:800;color:var(--head)}
+textarea{width:100%;margin-top:.4rem;padding:.5rem;border:1.5px solid #cbd5e1;border-radius:.6rem;font:inherit;background:#fff;color:#111;min-height:2.6rem}
+.bar{height:.8rem;background:#e2e8f0;border-radius:1rem;overflow:hidden;margin:.5rem 0}
+.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s}
+.btn{border:none;border-radius:.8rem;padding:.55rem 1rem;font-weight:700;background:var(--head);color:#fff;cursor:pointer;margin-right:.4rem}
+.slides{display:grid;gap:.8rem;grid-template-columns:1fr}
+@media(min-width:680px){.slides{grid-template-columns:1fr 1fr}}
+.slide{color:#fff;border-radius:1rem;padding:1rem 1.1rem}
+.slide h3{margin-bottom:.4rem}
+.slide li{margin:.25rem 0 .25rem 1.1rem}
+footer{text-align:center;color:rgba(255,255,255,.75);margin-top:2rem;font-size:.85rem;padding:0 1rem}
+footer a{color:#fff}
+@media print{header,.tabs,.themes,.btn,.slides,.hero{display:none!important}body{background:#fff}.card{box-shadow:none;border:1px solid #bbb;break-inside:avoid}h2.sec{color:#000;text-shadow:none}}
+</style>
+</head>
+<body>
+<header>
+<b>🏅 Schulcurriculum Sport</b>
+<nav><a href="#start">🎯 Start</a><a href="#regeln">⚖️ Regeln</a><a href="#plan">📅 Planung</a><a href="#uebergabe">📋 Übergabe</a><a href="#quellen">📚 Quellen</a></nav>
+<div class="themes"><button onclick="setTheme('')">🌊</button><button onclick="setTheme('sunset')">🌅</button><button onclick="setTheme('forest')">🌲</button><button onclick="setTheme('dark')">🌙</button></div>
+</header>
+<main>
+<section class="hero" id="start">
+<div class="e">🏅🏸⚽🏀🤸🏊</div>
+<h1>Schulcurriculum Sport</h1>
+<p>Realschule Baden-Württemberg · Bildungsplan 2016 · Sekundarstufe I · Entwurf zur Abstimmung</p>
+</section>
+
+<h2 class="sec">🎞️ Präsentation</h2>
+<div class="slides">
+<div class="slide" style="background:#16213e"><h3>🤔 Warum ein Schulcurriculum?</h3><ul><li>Verbindliche Jahresplanung und Progression</li><li>Keine Doppelungen zwischen Klassenstufen</li><li>Übergabe ans Folgejahr: Was wurde gemacht?</li><li>Struktur: ca. 75 % Kerncurriculum + 25 % Schulcurriculum</li></ul></div>
+<div class="slide" style="background:#0f3460"><h3>💪 Vier Kompetenzbereiche</h3><ul><li>🏃 Bewegungskompetenz</li><li>🧠 Reflexions- und Urteilskompetenz</li><li>👤 Personalkompetenz</li><li>🤝 Sozialkompetenz</li></ul></div>
+<div class="slide" style="background:#533483"><h3>🧩 Inhaltsbereiche</h3><ul><li>Spielen · Laufen, Springen, Werfen · Bewegen an Geräten</li><li>Bewegen im Wasser · Tanzen, Gestalten, Darstellen · Fitness entwickeln</li><li>Wahlpflicht: Kämpfen · Fahren, Rollen, Gleiten</li></ul></div>
+<div class="slide" style="background:#e94560"><h3>✅ Beschlussvorschlag</h3><ul><li>Planung als Fachcurriculum Sport verabschieden</li><li>Räume, Geräte, Außenstellen zuordnen</li><li>Jahrestabellen ab Schuljahr verbindlich führen</li><li>Ende des Schuljahres auswerten und anpassen</li></ul></div>
+</div>
+
+<h2 class="sec" id="regeln">⚖️ Regeln der Jahresplanung</h2>
+<div class="card"><ul style="margin-left:1.1rem;line-height:1.7">
+<li>Kl. 5/6: Jeder Inhaltsbereich mind. 1× in der Klassenstufe (nicht jährlich).</li>
+<li>Tanzen und Wasser: im Beispielcurriculum nur in Kl. 5 <i>oder</i> 6.</li>
+<li>Kl. 7–9: UV auf Basis mind. eines Inhaltsbereichs, Doppelungen pro Stufe vermeiden.</li>
+<li>Wahlpflicht: mind. 1× Kämpfen <i>oder</i> Fahren, Rollen, Gleiten.</li>
+<li>Kl. 10: mind. 3 UV, je max. 20 Std., je 2 sportpädagogische Perspektiven.</li>
+<li>Schulcurriculum: max. 2 Inhaltsbereiche des Kerncurriculums.</li>
+</ul><p class="muted" style="margin-top:.5rem">Genaue Formulierung bitte im Original prüfen (siehe Quellen).</p></div>
+
+<h2 class="sec" id="plan">📅 Jahresplanung</h2>
+<div class="tabs" id="tabs"></div>
+<div id="planhead" class="card"></div>
+<div id="items" class="grid" style="margin-top:.8rem"></div>
+
+<h2 class="sec" id="uebergabe">📋 Übergabe ans Folgejahr</h2>
+<div class="card">
+<p class="muted">Abhaken und Notizen werden <b>nur in deinem Browser</b> gespeichert (localStorage). Zum Weitergeben: Export als JSON oder Drucken.</p>
+<div class="bar"><span id="bar"></span></div><p id="pct" style="font-weight:800;color:var(--head)"></p>
+<label class="muted">Schuljahr: <input id="year" placeholder="z. B. 2026/27" style="padding:.4rem;border:1.5px solid #cbd5e1;border-radius:.5rem"></label>
+<div style="margin-top:.6rem"><button class="btn" onclick="exportJson()">⬇️ Export JSON</button><button class="btn" onclick="window.print()">🖨️ Drucken / PDF</button><button class="btn" style="background:#ef4444" onclick="resetAll()">🗑️ Zurücksetzen</button></div>
+<h3 style="margin-top:1rem;color:var(--head)">📝 Jahresreflexion (aktuelle Klasse)</h3>
+<div id="refl"></div>
+</div>
+
+<h2 class="sec" id="quellen">📚 Quellen</h2>
+<div class="card"><ul style="margin-left:1.1rem;line-height:1.7">
+<li><a href="https://www.bildungsplaene-bw.de/,Lde/BP2016BW_ALLG_SEK1_SPO">Bildungsplan 2016 Sport Sek I</a></li>
+<li><a href="https://www.schule-bw.de/service-und-tools/bildungsplaene/allgemein-bildende-schulen/bildungsplan-2016/beispielcurricula/sekundarstufe1/BP2016BW_ALLG_SEK1_SPO_BC_5-6_BSP_1.pdf">Beispielcurriculum Kl. 5/6</a></li>
+<li><a href="https://www.schule-bw.de/service-und-tools/bildungsplaene/allgemein-bildende-schulen/bildungsplan-2016/beispielcurricula/sekundarstufe1/BP2016BW_ALLG_SEK1_SPO_BC_10_BSP_1.pdf">Beispielcurriculum Kl. 10</a></li>
+<li><a href="https://lehrerfortbildung-bw.de/u_mks/sport/sek1/bp2016/fb4/4_2_plan/">Jahresplanung / Themenverteilungsplan</a></li>
+</ul><p class="muted" style="margin-top:.5rem">Kl. 5/6 und 10 orientieren sich an den Beispielcurricula; Kl. 7–9 sind Vorschläge. Mehr in <a href="https://github.com/jbkunama1/trt.SchulCurri/blob/main/docs/quellen.md">docs/quellen.md</a>.</p></div>
+</main>
+<footer>Realschule BW · BP 2016 · <a href="https://github.com/jbkunama1/trt.SchulCurri">Repo auf GitHub</a></footer>
+
+<script>
+const PLAN={
+"5":{label:"Klasse 5",emoji:"🎒",hours:105,kc:78,sc:27,items:[["UV 1","🎮 Spielen","Spielfähigkeit entwickeln, Regeln selbst festlegen, Fairplay",18],["UV 2","🏃 Laufen, Springen, Werfen","Kondition und Spiel grundlegend entwickeln",12],["UV 3","🤸 Bewegen an Geräten","Bewegungssicherheit und -vielfalt erwerben",15],["UV 4","💃 Tanzen, Gestalten, Darstellen","Rhythmisch bewegen (nur Kl. 5 oder 6)",12],["UV 5","💪 Fitness entwickeln","Grundlagen der Trainingsprinzipien",12],["WP 1","🥋 Kämpfen (Wahlpflicht)","Ringen und Raufen vorwiegend am Boden",9],["SC","🌟 Schulcurriculum","Schulturniere, Trendsport, Ergänzungen",27]]},
+"6":{label:"Klasse 6",emoji:"🧢",hours:105,kc:92,sc:13,items:[["UV 1","🎮 Spielen","Spielfähigkeit vertiefen, verbindliches Regelhandeln",24],["UV 2","🏃 Laufen, Springen, Werfen","Anlauftechniken, Sprung, Wurf",18],["UV 3","🤸 Bewegen an Geräten","Bewegungssicherheit und -vielfalt vertiefen",18],["UV 4","🏊 Bewegen im Wasser","Grundlagen, Schwimmtechniken (nur Kl. 5 oder 6)",16],["UV 5","💪 Fitness entwickeln","Ebenen der Belastungssteuerung",8],["WP 1","🥋 Kämpfen (Wahlpflicht)","Ringen und Raufen vorwiegend im Stand",8],["SC","🌟 Schulcurriculum","Schulspezifische Akzente",13]]},
+"78":{label:"Klasse 7/8",emoji:"🏐",hours:70,kc:54,sc:16,items:[["UV 1","🏐 Spielen vertieft","z. B. Badminton / Volleyball / Fußball",18],["UV 2","💪 Fitness entwickeln","Ausdauer, Kraft, Herzfrequenz, Trainingsprinzipien",18],["UV 3","🕺 Tanzen, Gestalten, Darstellen","Choreografie, Videoanalyse, Präsentation",18],["SC","🌟 Schulcurriculum","Projekttag, Klettern, JtfO, Turniere",16]]},
+"9":{label:"Klasse 9",emoji:"🚴",hours:70,kc:54,sc:16,items:[["UV 1","🏀 Komplexes Sportspiel","Taktik, Positionsspiel, Schiedsrichterrolle",18],["UV 2","🚴 Fahren, Rollen, Gleiten (WP)","Fahrrad/Inlines, Regeln, Umweltverträglichkeit",16],["UV 3","🕹️ Spielen alternativ","Fan-/Trendspiele, Schulhofsport beleben",12],["UV 4","🤸 Gestalten / Fitness","Bewegungen neu zusammensetzen",8],["SC","🌟 Schulcurriculum","Kooperation Vereine, Schnupperangebote",16]]},
+"10":{label:"Klasse 10",emoji:"🏸",hours:70,kc:54,sc:16,items:[["UV 1","🏸 Badminton","Rückschlagspiel, Wettkampf, Turnierorganisation",18],["UV 2","🧭 Orientierungslauf","Karte, Kompass, Gelände",18],["UV 3","🏋️ Fitness entwickeln","Individuelles Fitnessprogramm, Punch & Kick",18],["SC","🌟 Schulcurriculum","Zusatzangebote, Training mit Trainingsplan",16]]}
+};
+const RQ=[["gut","Was lief gut?"],["schwer","Was war zu schwer / zu leicht?"],["aendern","Welche UV ändern wir nächstes Jahr?"],["tipps","Tipps für die Kollegin / den Kollegen:"]];
+const KEY='trt.schulcurri.v1';
+let S=JSON.parse(localStorage.getItem(KEY)||'{}');S.done=S.done||{};S.note=S.note||{};S.refl=S.refl||{};S.year=S.year||'';
+let cur=Object.keys(PLAN)[0];
+const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
+function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('trt.theme',t)}
+setTheme(localStorage.getItem('trt.theme')||'');
+function tabs(){const el=document.getElementById('tabs');el.innerHTML='';for(const k in PLAN){const b=document.createElement('button');b.textContent=PLAN[k].emoji+' '+PLAN[k].label;b.className=k===cur?'on':'';b.onclick=()=>{cur=k;render()};el.appendChild(b)}}
+function render(){tabs();const p=PLAN[cur];
+document.getElementById('planhead').innerHTML='<h3>'+p.emoji+' '+p.label+'</h3><p class="muted">'+p.hours+' Std. = '+p.kc+' Kerncurriculum + '+p.sc+' Schulcurriculum</p>';
+const box=document.getElementById('items');box.innerHTML='';
+p.items.forEach(([c,t,d,h])=>{const id=cur+'|'+c;const div=document.createElement('div');div.className='card item'+(S.done[id]?' done':'');
+div.innerHTML='<input type="checkbox" '+(S.done[id]?'checked':'')+'><div style="flex:1"><span class="badge">'+c+'</span><span class="h">'+h+' Std.</span><h3>'+t+'</h3><p class="muted">'+d+'</p><textarea placeholder="📝 Notiz für die Übergabe…"></textarea></div>';
+const cb=div.querySelector('input'),ta=div.querySelector('textarea');ta.value=S.note[id]||'';
+cb.onchange=()=>{S.done[id]=cb.checked;div.classList.toggle('done',cb.checked);save();prog()};
+ta.oninput=()=>{S.note[id]=ta.value;save()};box.appendChild(div)});
+const r=document.getElementById('refl');r.innerHTML='';RQ.forEach(([k,q])=>{const id=cur+'|'+k;const l=document.createElement('label');l.className='muted';l.style.display='block';l.style.marginTop='.5rem';l.innerHTML=q+'<textarea></textarea>';const ta=l.querySelector('textarea');ta.value=S.refl[id]||'';ta.oninput=()=>{S.refl[id]=ta.value;save()};r.appendChild(l)});
+prog()}
+function prog(){const its=PLAN[cur].items;const n=its.filter(([c])=>S.done[cur+'|'+c]).length;const pct=Math.round(n/its.length*100);document.getElementById('bar').style.width=pct+'%';document.getElementById('pct').textContent=PLAN[cur].label+': '+n+' von '+its.length+' erledigt ('+pct+' %)'}
+document.getElementById('year').value=S.year;document.getElementById('year').oninput=e=>{S.year=e.target.value;save()};
+function exportJson(){const blob=new Blob([JSON.stringify({schuljahr:S.year,exportiert:new Date().toISOString(),daten:S},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='schulcurri-uebergabe-'+(S.year||'ohne-jahr').replace(/\W+/g,'-')+'.json';a.click()}
+function resetAll(){if(confirm('Alle lokalen Eingaben löschen?')){S={done:{},note:{},refl:{},year:''};save();document.getElementById('year').value='';render()}}
+render();
+</script>
+</body>
+</html>
