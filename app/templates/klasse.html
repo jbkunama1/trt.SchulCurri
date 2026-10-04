@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block bodyattrs %} data-year="{{ year.id if year else '' }}" data-stage="{{ stage }}"{% endblock %}
+{% block content %}
+<div class="hero small">
+  <div class="hero-emoji">{{ meta.emoji }}</div>
+  <h1>{{ meta.label }}</h1>
+  <p class="lead">
+    {% if year %}Schuljahr {{ year.label }} · {{ meta.hours }} Std. ({{ meta.kc }} KC + {{ meta.sc }} SC) · {{ meta.source }}
+    {% else %}Kein Schuljahr angelegt.{% endif %}
+  </p>
+  {% if year %}
+  <div class="btn-row">
+    <a class="btn" href="{{ url_for('export_csv', stage=stage) }}">⬇️ CSV</a>
+    <a class="btn" href="{{ url_for('export_json', stage=stage) }}">⬇️ JSON</a>
+    <button type="button" class="btn" data-print="1">🖨️ Drucken / PDF</button>
+  </div>
+  {% endif %}
+</div>
+{% if year %}
+<h2 class="section-title">📋 Jahresplanung</h2>
+<div class="checklist">
+  {% for it in items %}
+  <div class="card item" data-id="{{ it.id }}" data-status="{{ it.status }}">
+    <div class="item-head"><span class="badge">{{ it.item_code }}</span><span class="hours">{{ it.hours }} Std.</span></div>
+    <h3>{{ it.item_title }}</h3>
+    <p class="desc">{{ it.item_desc }}</p>
+    <div class="status-row">
+      {% for st, ic in icons.items() %}<button type="button" class="status-btn {{ 'active' if it.status == st }}" data-status="{{ st }}" title="{{ st }}">{{ ic }}</button>{% endfor %}
+    </div>
+    <textarea class="note" maxlength="5000" placeholder="📝 Notiz für die Übergabe…">{{ it.note }}</textarea>
+    <div class="meta muted">{% if it.updated_at %}🕒 {{ it.updated_at }} · {{ it.updated_by }}{% endif %}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<h2 class="section-title">📊 Bewertungsbogen</h2>
+<div class="grid">
+  {% for e in evals %}
+  <div class="card eval" data-id="{{ e.id }}">
+    <div class="eval-head"><h3>{{ e.area }}</h3><button type="button" class="done-btn" data-done="{{ 1 if e.done else 0 }}">{{ '✅' if e.done else '⬜' }}</button></div>
+    <p class="desc">{{ e.instrument }}</p>
+    <textarea class="result" maxlength="5000" placeholder="Ergebnisse / Anmerkungen…">{{ e.result }}</textarea>
+  </div>
+  {% endfor %}
+</div>
+
+<h2 class="section-title">📝 Jahresreflexion</h2>
+<div class="card">
+  {% for qkey, qtext in rq %}
+  <label>{{ qtext }}<textarea class="ref" maxlength="5000" data-qkey="{{ qkey }}">{{ refs.get(qkey, '') }}</textarea></label>
+  {% endfor %}
+  <div id="saved" class="muted"></div>
+</div>
+{% endif %}
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='klasse.js') }}"></script>{% endblock %}

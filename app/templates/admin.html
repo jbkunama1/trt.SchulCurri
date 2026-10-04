@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero small">
+  <div class="hero-emoji">🛡️</div>
+  <h1>Administration</h1>
+  <p class="lead">Schuljahre, Benutzer, Backup</p>
+</div>
+<div class="grid">
+  <form method="post" class="card">
+    {{ csrf_field() }}<input type="hidden" name="action" value="add_year">
+    <h2>🗓️ Schuljahr anlegen</h2>
+    <label>Bezeichnung <input name="label" placeholder="2026/27" required maxlength="20"></label>
+    <button class="btn btn-primary">Anlegen</button>
+  </form>
+  <form method="post" class="card">
+    {{ csrf_field() }}<input type="hidden" name="action" value="copy_year">
+    <h2>📄 Schuljahr kopieren</h2>
+    <p class="muted">Übernimmt Status und Notizen der Planung als Startpunkt.</p>
+    <label>Von <select name="src_id">{% for y in years %}<option value="{{ y.id }}">{{ y.label }}</option>{% endfor %}</select></label>
+    <label>Neue Bezeichnung <input name="label" placeholder="2027/28" required maxlength="20"></label>
+    <button class="btn">Kopieren</button>
+  </form>
+  <div class="card">
+    <h2>📚 Schuljahre</h2>
+    {% for y in years %}
+    <div class="row">
+      <span>{{ '🟢' if y.active else '⚪' }} {{ y.label }} <span class="muted">({{ y['items'] }} Einträge)</span></span>
+      {% if not y.active %}
+      <form method="post" class="inline">{{ csrf_field() }}<input type="hidden" name="action" value="activate_year"><input type="hidden" name="year_id" value="{{ y.id }}"><button class="btn small">Aktivieren</button></form>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  <form method="post" class="card">
+    {{ csrf_field() }}<input type="hidden" name="action" value="add_user">
+    <h2>👤 Benutzer anlegen</h2>
+    <label>Benutzername (a-z, 0-9, _ . -) <input name="username" required pattern="[a-z0-9_.-]{3,32}" autocapitalize="none"></label>
+    <label>Anzeigename <input name="display_name" maxlength="60"></label>
+    <label>Passwort (mind. 8 Zeichen) <input name="password" type="password" required minlength="8" autocomplete="new-password"></label>
+    <label>Rolle <select name="role"><option value="teacher">Lehrkraft</option><option value="admin">Admin</option></select></label>
+    <button class="btn btn-primary">Anlegen</button>
+  </form>
+  <div class="card">
+    <h2>👥 Benutzer</h2>
+    {% for u in users %}
+    <div class="row">
+      <span>{{ '🟢' if u.active else '🔴' }} {{ u.display_name }} <span class="muted">(@{{ u.username }}, {{ u.role }})</span></span>
+      <div class="btn-row">
+        {% if u.id != g.user.id %}
+        <form method="post" class="inline">{{ csrf_field() }}<input type="hidden" name="action" value="toggle_user"><input type="hidden" name="user_id" value="{{ u.id }}"><button class="btn small">{{ 'Deaktivieren' if u.active else 'Aktivieren' }}</button></form>
+        {% endif %}
+        <form method="post" class="inline" data-confirm="Passwort wirklich zurücksetzen?">{{ csrf_field() }}<input type="hidden" name="action" value="reset_pw"><input type="hidden" name="user_id" value="{{ u.id }}"><input name="new_password" type="password" placeholder="Neues PW" class="mini-input" required minlength="8" autocomplete="new-password"><button class="btn small">🔑</button></form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="card">
+    <h2>💾 Backup</h2>
+    <p class="muted">Konsistente Kopie der SQLite-Datenbank (enthält Passwort-Hashes, sicher aufbewahren).</p>
+    <a class="btn btn-primary" href="{{ url_for('backup') }}">⬇️ DB-Backup laden</a>
+  </div>
+</div>
+<div class="card">
+  <h2>📜 Protokoll (Admin-Aktionen, letzte 40)</h2>
+  <ul class="list small">{% for a in log %}<li><span class="muted">{{ a.created_at }}</span> · {{ a.username }}: {{ a.action }} {{ a.detail }}</li>{% endfor %}</ul>
+</div>
+{% endblock %}

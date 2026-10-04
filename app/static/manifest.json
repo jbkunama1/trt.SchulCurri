@@ -1,0 +1,9 @@
+{
+  "name": "Schulcurriculum Sport",
+  "short_name": "Curri Sport",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f3460",
+  "theme_color": "#0f3460",
+  "icons": []
+}

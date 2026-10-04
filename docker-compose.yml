@@ -1,0 +1,21 @@
+services:
+  schulcurri:
+    image: ghcr.io/jbkunama1/trt.schulcurri:latest
+    build: .
+    container_name: schulcurri
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Leer lassen: Passwort wird beim ersten Start erzeugt und ins Container-Log geschrieben
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
+      # Leer lassen: Schluessel wird in /data/.secret_key erzeugt und bleibt erhalten
+      - SECRET_KEY=${SECRET_KEY:-}
+      # Hinter HTTPS-Reverse-Proxy (z. B. Cloudflare): beide auf 1 setzen
+      - COOKIE_SECURE=${COOKIE_SECURE:-0}
+      - TRUST_PROXY=${TRUST_PROXY:-0}
+    volumes:
+      - schulcurri_data:/data
+
+volumes:
+  schulcurri_data:

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero small">
+  <div class="hero-emoji">📊🏅</div>
+  <h1>Übersicht</h1>
+  <p class="lead">
+    {% if year %}Aktives Schuljahr: <strong>{{ year.label }}</strong>
+    {% elif g.user.role == 'admin' %}Noch kein Schuljahr angelegt. Bitte im <a href="{{ url_for('admin') }}">Admin-Bereich</a> anlegen.
+    {% else %}Noch kein Schuljahr angelegt. Bitte die Administration fragen.{% endif %}
+  </p>
+</div>
+<div class="grid stages">
+  {% for s in stages %}
+  {% set p = progress[s.key] %}
+  <a class="card stage-card" href="{{ url_for('klasse', stage=s.key) }}">
+    <div class="stage-emoji">{{ s.emoji }}</div>
+    <h2>{{ s.label }}</h2>
+    <p class="muted">{{ s.hours }} Std. · {{ s.kc }} KC + {{ s.sc }} SC</p>
+    <p><span class="chip">{{ s.source }}</span></p>
+    <div class="progress"><span style="width: {{ p.pct }}%"></span></div>
+    <p class="pct">{{ p.pct }} % erledigt</p>
+    <div class="chips">
+      <span class="chip">✅ {{ p.counts.get('erledigt', 0) }}</span>
+      <span class="chip">🔶 {{ p.counts.get('teilweise', 0) }}</span>
+      <span class="chip">⬜ {{ p.counts.get('offen', 0) }}</span>
+      <span class="chip">➖ {{ p.counts.get('entfaellt', 0) }}</span>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+<div class="card">
+  <h2>📚 Schuljahre</h2>
+  <ul class="list">
+    {% for y in years %}<li>{{ '🟢' if y.active else '⚪' }} {{ y.label }}</li>
+    {% else %}<li class="muted">Noch keine Schuljahre.</li>{% endfor %}
+  </ul>
+</div>
+{% endblock %}

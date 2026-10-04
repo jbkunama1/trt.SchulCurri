@@ -1,0 +1,8 @@
+.git
+.github
+tests
+index.html
+app/data
+**/__pycache__
+*.pyc
+.env

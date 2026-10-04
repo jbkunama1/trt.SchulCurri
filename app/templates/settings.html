@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero small">
+  <div class="hero-emoji">⚙️</div>
+  <h1>Einstellungen</h1>
+  <p class="lead">Angemeldet als {{ g.user.display_name }} ({{ g.user.username }})</p>
+</div>
+<form method="post" class="card login-card">
+  {{ csrf_field() }}
+  <h2>🔑 Passwort ändern</h2>
+  <label>Altes Passwort <input type="password" name="old_pw" required autocomplete="current-password"></label>
+  <label>Neues Passwort (mind. 8 Zeichen) <input type="password" name="new_pw" required minlength="8" autocomplete="new-password"></label>
+  <label>Neues Passwort wiederholen <input type="password" name="new_pw2" required minlength="8" autocomplete="new-password"></label>
+  <button class="btn btn-primary">Ändern ✅</button>
+</form>
+<div class="card">
+  <h2>🎨 Design</h2>
+  <p class="muted">Wird in deinem Profil gespeichert.</p>
+  <div class="theme-grid">
+    {% for t in themes %}<button type="button" class="theme-card {{ 'active' if g.user.theme == t }}" data-set-theme="{{ t }}">{{ t }}</button>{% endfor %}
+  </div>
+</div>
+{% endblock %}
