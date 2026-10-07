@@ -3,7 +3,7 @@
 <div class="hero small">
   <div class="hero-emoji">🛡️</div>
   <h1>Administration</h1>
-  <p class="lead">Schuljahre, Benutzer, Backup</p>
+  <p class="lead">Schuljahre, Benutzer, Telegram, Backup</p>
 </div>
 <div class="grid">
   <form method="post" class="card">
@@ -53,6 +53,19 @@
       </div>
     </div>
     {% endfor %}
+  </div>
+  <div class="card">
+    <h2>📲 Telegram</h2>
+    <p class="muted">Bot-Token: {{ '✅ gesetzt' if tg.token else '❌ fehlt (TELEGRAM_BOT_TOKEN)' }}<br>
+      Chat-IDs: {{ tg.chats }}{% if not tg.chats %} (TELEGRAM_CHAT_ID leer){% endif %}<br>
+      Öffentliche URL: {{ tg.public_url or '❌ fehlt (PUBLIC_URL)' }}</p>
+    <p class="muted">Befehle im Chat: /id, /status, /offen [Klasse], /hilfe. Einrichtung: docs/telegram.md im Repo.</p>
+    <div class="btn-row">
+      <form method="post" class="inline">{{ csrf_field() }}<input type="hidden" name="action" value="tg_set_webhook"><button class="btn small">Webhook setzen</button></form>
+      <form method="post" class="inline">{{ csrf_field() }}<input type="hidden" name="action" value="tg_info"><button class="btn small">Status prüfen</button></form>
+      <form method="post" class="inline">{{ csrf_field() }}<input type="hidden" name="action" value="tg_test"><button class="btn small">Testnachricht</button></form>
+      <form method="post" class="inline" data-confirm="Webhook wirklich entfernen?">{{ csrf_field() }}<input type="hidden" name="action" value="tg_delete_webhook"><button class="btn small">Webhook entfernen</button></form>
+    </div>
   </div>
   <div class="card">
     <h2>💾 Backup</h2>

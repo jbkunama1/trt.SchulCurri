@@ -16,7 +16,9 @@ from markupsafe import Markup
 from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash, generate_password_hash
 
+import telegram_bot
 from curriculum import CURRICULUM, EVALUATIONS, REFLECTION_QUESTIONS, STAGES, STAGE_KEYS
+from telegram_bot import esc
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.environ.get('DATA_DIR', os.path.join(BASE_DIR, 'data'))
@@ -148,6 +150,24 @@ def current_year(c):
             or c.execute('SELECT * FROM school_years ORDER BY id DESC LIMIT 1').fetchone())
 
 
+def compute_progress(c, year_id):
+    progress = {s['key']: {'counts': {}, 'pct': 0} for s in STAGES}
+    rows = c.execute('SELECT stage,status,COUNT(*) n FROM checklist WHERE school_year_id=? GROUP BY stage,status',
+                     (year_id,))
+    for r in rows:
+        if r['stage'] in progress:
+            progress[r['stage']]['counts'][r['status']] = r['n']
+    for p in progress.values():
+        k = p['counts']
+        base = sum(k.values()) - k.get('entfaellt', 0)
+        p['pct'] = round((k.get('erledigt', 0) + 0.5 * k.get('teilweise', 0)) / base * 100) if base else 0
+    return progress
+
+
+tg = telegram_bot.Bot(DATA_DIR, db, current_year, compute_progress, STAGES)
+tg.register(app)
+
+
 def csrf_token():
     if 'csrf' not in session:
         session['csrf'] = secrets.token_urlsafe(24)
@@ -170,7 +190,8 @@ def before():
                                (uid,)).fetchone()
         if g.user is None:
             session.clear()
-    if request.method == 'POST':
+    # Der Telegram-Webhook hat keine Session; er prueft stattdessen den Secret-Header
+    if request.method == 'POST' and request.endpoint != 'telegram_webhook':
         expected = session.get('csrf')
         sent = request.headers.get('X-CSRF-Token') or request.form.get('csrf_token') or ''
         if not expected or not secrets.compare_digest(sent.encode(), expected.encode()):
@@ -263,17 +284,7 @@ def dashboard():
     with db() as c:
         year = current_year(c)
         years = c.execute('SELECT * FROM school_years ORDER BY id DESC').fetchall()
-        progress = {s['key']: {'counts': {}, 'pct': 0} for s in STAGES}
-        if year:
-            rows = c.execute('SELECT stage,status,COUNT(*) n FROM checklist WHERE school_year_id=? GROUP BY stage,status',
-                             (year['id'],))
-            for r in rows:
-                if r['stage'] in progress:
-                    progress[r['stage']]['counts'][r['status']] = r['n']
-            for p in progress.values():
-                k = p['counts']
-                base = sum(k.values()) - k.get('entfaellt', 0)
-                p['pct'] = round((k.get('erledigt', 0) + 0.5 * k.get('teilweise', 0)) / base * 100) if base else 0
+        progress = compute_progress(c, year['id']) if year else {s['key']: {'counts': {}, 'pct': 0} for s in STAGES}
     return render_template('dashboard.html', stages=STAGES, progress=progress, year=year, years=years)
 
 
@@ -307,11 +318,20 @@ def api_checklist():
     except (TypeError, ValueError):
         abort(400)
     now = datetime.datetime.now().isoformat(timespec='seconds')
+    msg = None
     with db() as c:
-        n = c.execute('UPDATE checklist SET status=?, note=?, updated_by=?, updated_at=? WHERE id=?',
-                      (d['status'], clip(d.get('note')), g.user['username'], now, item_id)).rowcount
-    if not n:
-        abort(404)
+        row = c.execute('SELECT status,stage,item_title,school_year_id FROM checklist WHERE id=?', (item_id,)).fetchone()
+        if row is None:
+            abort(404)
+        c.execute('UPDATE checklist SET status=?, note=?, updated_by=?, updated_at=? WHERE id=?',
+                  (d['status'], clip(d.get('note')), g.user['username'], now, item_id))
+        if d['status'] == 'erledigt' and row['status'] != 'erledigt':
+            pct = compute_progress(c, row['school_year_id'])[row['stage']]['pct']
+            label = next(s['label'] for s in STAGES if s['key'] == row['stage'])
+            msg = '✅ <b>%s</b> · %s erledigt\n👤 %s · Fortschritt: %d %%' % (
+                esc(label), esc(row['item_title']), esc(g.user['username']), pct)
+    if msg:
+        tg.notify(msg)
     return jsonify(ok=True, updated_at=now)
 
 
@@ -470,6 +490,7 @@ def admin():
     if request.method == 'POST':
         f = request.form
         act = f.get('action')
+        note = None
         try:
             with db() as c:
                 if act in ('add_year', 'copy_year'):
@@ -491,11 +512,17 @@ def admin():
                         c.execute('UPDATE school_years SET active=1 WHERE id=?', (new_id,))
                     audit(c, act, label)
                     flash('Schuljahr %s angelegt ✅' % label)
+                    note = '🗓️ Schuljahr <b>%s</b> angelegt (von %s)' % (esc(label), esc(g.user['username']))
                 elif act == 'activate_year':
+                    year_id = int(f['year_id'])
+                    row = c.execute('SELECT label FROM school_years WHERE id=?', (year_id,)).fetchone()
+                    if row is None:
+                        raise ValueError('Schuljahr nicht gefunden')
                     c.execute('UPDATE school_years SET active=0')
-                    c.execute('UPDATE school_years SET active=1 WHERE id=?', (int(f['year_id']),))
-                    audit(c, act, f['year_id'])
+                    c.execute('UPDATE school_years SET active=1 WHERE id=?', (year_id,))
+                    audit(c, act, year_id)
                     flash('Aktives Schuljahr gesetzt ✅')
+                    note = '🟢 Aktives Schuljahr: <b>%s</b>' % esc(row['label'])
                 elif act == 'add_user':
                     name, pw = f.get('username', '').strip().lower(), f.get('password', '')
                     role = f.get('role') if f.get('role') in ('teacher', 'admin') else 'teacher'
@@ -519,7 +546,12 @@ def admin():
                     c.execute('UPDATE users SET password_hash=? WHERE id=?',
                               (generate_password_hash(f['new_password']), int(f['user_id'])))
                     audit(c, act, f['user_id'])
-                    flash('Passwort zurückgesetzt 🔑')
+                    flash('Passwort zurücksetzt 🔑')
+                elif act in ('tg_test', 'tg_set_webhook', 'tg_delete_webhook', 'tg_info'):
+                    flash(tg.admin_action(act))
+                    audit(c, act)
+            if note:
+                tg.notify(note)
         except sqlite3.IntegrityError:
             flash('Eintrag existiert bereits ❌')
         except (ValueError, KeyError) as e:
@@ -530,7 +562,7 @@ def admin():
         years = c.execute('SELECT y.*, (SELECT COUNT(*) FROM checklist c WHERE c.school_year_id=y.id) items '
                           'FROM school_years y ORDER BY y.id DESC').fetchall()
         log = c.execute('SELECT * FROM audit_log ORDER BY id DESC LIMIT 40').fetchall()
-    return render_template('admin.html', users=users, years=years, log=log)
+    return render_template('admin.html', users=users, years=years, log=log, tg=tg.status())
 
 
 init_db()

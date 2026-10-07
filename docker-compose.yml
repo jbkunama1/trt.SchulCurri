@@ -14,6 +14,11 @@ services:
       # Hinter HTTPS-Reverse-Proxy (z. B. Cloudflare): beide auf 1 setzen
       - COOKIE_SECURE=${COOKIE_SECURE:-0}
       - TRUST_PROXY=${TRUST_PROXY:-0}
+      # Telegram (optional, Einrichtung siehe docs/telegram.md)
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-}
+      - TELEGRAM_WEBHOOK_SECRET=${TELEGRAM_WEBHOOK_SECRET:-}
+      - PUBLIC_URL=${PUBLIC_URL:-}
     volumes:
       - schulcurri_data:/data
 
