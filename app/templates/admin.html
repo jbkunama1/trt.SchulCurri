@@ -57,9 +57,9 @@
   <div class="card">
     <h2>📲 Telegram</h2>
     <p class="muted">Bot-Token: {{ '✅ gesetzt' if tg.token else '❌ fehlt (TELEGRAM_BOT_TOKEN)' }}<br>
-      Chat-IDs: {{ tg.chats }}{% if not tg.chats %} (TELEGRAM_CHAT_ID leer){% endif %}<br>
+      Admins (fest): {{ tg.admins }}{% if not tg.admins %} ❌ TELEGRAM_ADMIN_CHAT_ID leer{% endif %} · Empfänger gesamt: {{ tg.chats }}<br>
       Öffentliche URL: {{ tg.public_url or '❌ fehlt (PUBLIC_URL)' }}</p>
-    <p class="muted">Befehle im Chat: /id, /status, /offen [Klasse], /hilfe. Einrichtung: docs/telegram.md im Repo.</p>
+    <p class="muted">Die Admins legen User im Bot per Einladungslink an (/menu → 🛡️ Admin). Einrichtung: docs/telegram.md im Repo. Nach dem Update einmal „Webhook setzen“ klicken, damit Button-Klicks ankommen.</p>
     <div class="btn-row">
       <form method="post" class="inline">{{ csrf_field() }}<input type="hidden" name="action" value="tg_set_webhook"><button class="btn small">Webhook setzen</button></form>
       <form method="post" class="inline">{{ csrf_field() }}<input type="hidden" name="action" value="tg_info"><button class="btn small">Status prüfen</button></form>

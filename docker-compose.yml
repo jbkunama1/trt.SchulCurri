@@ -16,6 +16,7 @@ services:
       - TRUST_PROXY=${TRUST_PROXY:-0}
       # Telegram (optional, Einrichtung siehe docs/telegram.md)
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_ADMIN_CHAT_ID=${TELEGRAM_ADMIN_CHAT_ID:-}
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-}
       - TELEGRAM_WEBHOOK_SECRET=${TELEGRAM_WEBHOOK_SECRET:-}
       - PUBLIC_URL=${PUBLIC_URL:-}

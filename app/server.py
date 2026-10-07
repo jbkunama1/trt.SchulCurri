@@ -118,6 +118,7 @@ def init_db():
     with db() as c:
         c.execute('PRAGMA journal_mode=WAL')
         c.executescript(SCHEMA)
+        tg.ensure_schema(c)
         if not c.execute('SELECT 1 FROM users WHERE role=?', ('admin',)).fetchone():
             pw = os.environ.get('ADMIN_PASSWORD')
             generated = not pw
@@ -551,7 +552,7 @@ def admin():
                     flash(tg.admin_action(act))
                     audit(c, act)
             if note:
-                tg.notify(note)
+                tg.notify_admin(note)
         except sqlite3.IntegrityError:
             flash('Eintrag existiert bereits ❌')
         except (ValueError, KeyError) as e:
